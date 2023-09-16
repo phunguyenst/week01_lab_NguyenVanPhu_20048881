@@ -11,17 +11,12 @@ public class DatabaseConnection {
 
     public static Connection getConnection() {
         Connection connection = null;
-
-        // Thông tin kết nối MariaDB
-        String url = "jdbc:mariadb://localhost:3307/mydb"; // Thay đổi tên cơ sở dữ liệu của bạn
+        String url = "jdbc:mariadb://localhost:3307/mydb";
         String username = "root";
         String password = "sapassword";
 
         try {
-            // Đăng ký MariaDB Connector/J
             Class.forName("org.mariadb.jdbc.Driver");
-
-            // Tạo kết nối
             connection =  DriverManager.getConnection(url, username, password);
             if (connection != null) {
                 System.out.println("Kết nối đến CSDL thành công.");

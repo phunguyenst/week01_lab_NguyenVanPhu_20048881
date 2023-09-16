@@ -10,6 +10,9 @@ public class Role {
 
     private short status;
 
+    public Role() {
+    }
+
     public Role(String role_id, String role_name, String description, short status) {
         this.role_id = role_id;
         this.role_name = role_name;

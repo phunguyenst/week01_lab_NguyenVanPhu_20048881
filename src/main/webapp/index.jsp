@@ -47,10 +47,11 @@
     <div class="login-container">
         <h1>Đăng nhập</h1>
         <form action="ControllerServlet" method="post">
-            <label for="txtText" >Tên đăng nhập:</label>
-            <input type="text" name="txtText" id="txtText">
+            <label for="txtText" >Email:</label>
+            <input type="text" name="txtText" id="txtText" required>
             <label for="txtPass">Mật khẩu:</label>
-            <input type="password" name="txtPass" id="txtPass">
+            <input type="password" name="txtPass" id="txtPass" required>
+            <input type="hidden" name="action" value="Login">
             <input name="Login" type="submit" value="Login">
         </form>
 

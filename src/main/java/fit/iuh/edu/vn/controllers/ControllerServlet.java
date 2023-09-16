@@ -1,5 +1,10 @@
 package fit.iuh.edu.vn.controllers;
 
+import fit.iuh.edu.vn.entities.Account;
+import fit.iuh.edu.vn.entities.Role;
+import fit.iuh.edu.vn.repositories.AccountRepository;
+import fit.iuh.edu.vn.repositories.LogRepository;
+import fit.iuh.edu.vn.repositories.RoleRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,96 +13,168 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/ControllerServlet","/control"})
 public class ControllerServlet extends HttpServlet {
+    AccountRepository accountRepository = new AccountRepository();
+    RoleRepository roleRepository = new RoleRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-        String url = req.getParameter("txtText");
-        out.println(url);
+        super.doGet(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         if ("Login".equals(action)) {
-            String tam = req.getParameter("txtText");
-            System.out.println(action);
-            // Xử lý đăng nhập
+
             handleLogin(req, resp);
         } else if ("addAccount".equals(action)) {
-            // Xử lý thêm tài khoản
+
             handleAddAccount(req, resp);
         } else if ("updateAccount".equals(action)) {
-            // Xử lý cập nhật tài khoản
+
             handleUpdateAccount(req, resp);
         } else if ("deleteAccount".equals(action)) {
-            // Xử lý xóa tài khoản
+
             handleDeleteAccount(req, resp);
-        } else if ("displayAccountInfo".equals(action)) {
-            // Xử lý hiển thị thông tin tài khoản
-            handleDisplayAccountInfo(req, resp);
         } else if ("displayRolePermissions".equals(action)) {
-            // Xử lý hiển thị quyền của role
+
             handleDisplayRolePermissions(req, resp);
         } else if ("displayAccountsByRole".equals(action)) {
-            // Xử lý hiển thị account của role
+
             handleDisplayAccountsByRole(req, resp);
-        } else if ("grantPermissions".equals(action)) {
-            // Xử lý cấp quyền cho account
-            handleGrantPermissions(req, resp);
-        } else if ("logLogin".equals(action)) {
-            // Xử lý ghi log đăng nhập
-            handleLogLogin(req, resp);
-        } else if ("logLogout".equals(action)) {
-            // Xử lý ghi log đăng xuất
-            handleLogLogout(req, resp);
-        } else if ("logout".equals(action)) {
-            // Xử lý đăng xuất
+        }else if ("logout".equals(action)) {
+
             handleLogout(req, resp);
         }
     }
 
-    private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String userName = req.getParameter("txtText");
-        String passWord = req.getParameter("txtPass");
-        System.out.println(userName);
-        System.out.println(passWord);
-        if("admin".equals(userName) && "123".equals(passWord)){
-            HttpSession session = req.getSession();
-            session.setAttribute("username", userName);
-            resp.sendRedirect("dashboard.jsp");
-            System.out.println(userName);
-            System.out.println(passWord);
+    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        LogRepository logRepository = new LogRepository();
+        HttpSession session = req.getSession();
+        if (session.getAttribute("email") != null) {
+            String email = (String) session.getAttribute("email");
+            logRepository.addLogoutLog(email);
+
+            session.invalidate();
+            req.getRequestDispatcher("logout.jsp").forward(req, resp);
         }
-        else{
-            req.setAttribute("error","Invalid username or password");
-            req.getRequestDispatcher("jogin.jsp").forward(req, resp);
-        }
-    }
-    private void handleAddAccount(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleUpdateAccount(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleDeleteAccount(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleDisplayAccountInfo(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleDisplayRolePermissions(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleDisplayAccountsByRole(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleGrantPermissions(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleLogLogin(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleLogLogout(HttpServletRequest req, HttpServletResponse resp) {
-    }
-    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) {
     }
 
+    private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        LogRepository logRepository = new LogRepository();
+        String email = req.getParameter("txtText");
+        String password = req.getParameter("txtPass");
+
+
+        if (accountRepository.checkLogin(email, password)) {
+            HttpSession sesson = req.getSession();
+            List<String> logList = (List<String>) sesson.getAttribute("logList");
+            if (logList == null) {
+                logList = new ArrayList<>();
+            }
+            Account account = accountRepository.getAccountByEmail(email);
+            String account_id = accountRepository.getAccountIdByEmail(email);
+            logRepository.addLoginLog(account_id);
+            String logEntry = "Đăng nhập thành công vào lúc: " + new Date();
+            logList.add(logEntry);
+            sesson.setAttribute("logList", logList);
+
+            sesson.setAttribute("account", account);
+            sesson.setAttribute("email", email);
+
+            System.out.println("account_id: " + account_id);
+            String userRole = roleRepository.getUserRole(account_id);
+
+
+            System.out.println(account);
+            System.out.println(userRole);
+            if ("administrator".equals(userRole)) {
+                req.setAttribute("account", account);
+                req.getRequestDispatcher("dashboard_admin.jsp").forward(req, resp);
+            } else if ("user".equals(userRole)) {
+                req.setAttribute("account", account);
+                req.getRequestDispatcher("dashboard_user.jsp").forward(req, resp);
+            } else {
+                System.out.println("lỗi 2");
+                req.setAttribute("error", "invalid user or password");
+                req.getRequestDispatcher("index.jsp").forward(req, resp);
+            }
+        } else {
+            System.out.println("lỗi 1");
+            req.setAttribute("error", "invalid user or password");
+            req.getRequestDispatcher("index.jsp").forward(req, resp);
+        }
+    }
+
+
+    private void handleAddAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+       String account_id = req.getParameter("account_id");
+       String full_name = req.getParameter("full_name");
+       String password = req.getParameter("password");
+       String email = req.getParameter("email");
+       String phone = req.getParameter("phone");
+       Short status = Short.valueOf(req.getParameter("status"));
+
+       Account account = new Account(account_id, full_name, password, email, phone, status);
+
+       accountRepository.addAccount(account);
+       resp.sendRedirect("dashboard_admin.jsp");
+    }
+
+
+    private void handleUpdateAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String account_id = req.getParameter("account_id");
+        String full_name = req.getParameter("full_name");
+        String password = req.getParameter("password");
+        String email = req.getParameter("email");
+        String phone = req.getParameter("phone");
+        Short status = Short.valueOf(req.getParameter("status"));
+
+        Account account = new Account(account_id, full_name, password, email, phone, status);
+
+        accountRepository.updateAccount(account);
+        resp.sendRedirect("dashboard_admin.jsp");
+    }
+
+
+    private void handleDeleteAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String account_id = req.getParameter("account_id");
+        accountRepository.deleteAccount(account_id);
+        resp.sendRedirect("dashboard_admin.jsp");
+
+    }
+
+    private void handleDisplayRolePermissions(HttpServletRequest req, HttpServletResponse resp) {
+        String roleId = req.getParameter("roleId");
+        List<Role> rolePermissions = roleRepository.getRole(roleId);
+        req.setAttribute("rolePermissions", rolePermissions);
+        try {
+            req.getRequestDispatcher("role_permissions.jsp").forward(req, resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void handleDisplayAccountsByRole(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String roleId = req.getParameter("roleId");
+
+        List<Account> accountRole = accountRepository.getAccountsByRole(roleId);
+        req.setAttribute("accountRole", accountRole);
+        req.getRequestDispatcher("dashboard_user.jsp").forward(req, resp);
+    }
 
 }
+
+
+
+
+

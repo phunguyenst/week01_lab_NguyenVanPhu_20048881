@@ -12,6 +12,9 @@ public class Log {
     private Date logout_time;
     private String notes;
 
+    public Log() {
+    }
+
     public Log(int id, String account_id, Date login_time, Date logout_time, String notes) {
         this.id = id;
         this.account_id = account_id;

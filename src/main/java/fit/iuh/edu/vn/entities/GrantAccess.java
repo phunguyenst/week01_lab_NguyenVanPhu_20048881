@@ -8,6 +8,9 @@ public class GrantAccess {
 
     private String note;
 
+    public GrantAccess() {
+    }
+
     public GrantAccess(String role_id, String account_id, boolean is_grant, String note) {
         this.role_id = role_id;
         this.account_id = account_id;
