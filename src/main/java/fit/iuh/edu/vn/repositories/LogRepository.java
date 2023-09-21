@@ -1,7 +1,5 @@
 package fit.iuh.edu.vn.repositories;
 
-import fit.iuh.edu.vn.connection.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

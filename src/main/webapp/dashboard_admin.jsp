@@ -2,8 +2,7 @@
 <%@ page import="fit.iuh.edu.vn.entities.Role" %>
 <%@ page import="fit.iuh.edu.vn.entities.Account" %>
 <%@ page import="java.util.List" %>
-<%@ page import="fit.iuh.edu.vn.repositories.AccountRepository" %>
-<%@ page import="fit.iuh.edu.vn.repositories.AccountRepository" %>
+
 <%@ page import="fit.iuh.edu.vn.repositories.RoleRepository" %><%--
   Created by IntelliJ IDEA.
   User: Student
@@ -69,15 +68,21 @@
 
 <%-- ... --%>
 <%
-    List<Role> rolePermissions = (List<Role>) request.getAttribute("rolePermissions");
+
+    List<Role> rolePermissions = new RoleRepository().getRolesForAccount(account.getAccount_id());
+
+//    for (Role role:rolePermissions) {
+//        System.out.println(role);
+//    }
     if (rolePermissions != null && !rolePermissions.isEmpty()) {
         for (Role role : rolePermissions) {
+            System.out.println(role);
 %>
 <h2>Role Information</h2>
 <p>Role ID: <%= role.getRole_id() %></p>
 <p>Role Name: <%= role.getRole_name() %></p>
 <p>Description: <%= role.getDescription() %></p>
-<p>Status: <%= role.getStatus() == 1 ? "Active" : "Inactive" %></p>
+<p>Status: <%= role.getStatus() == 1 ? "Hoạt động" : "Không hoạt động" %></p>
 <%
     }
 } else {

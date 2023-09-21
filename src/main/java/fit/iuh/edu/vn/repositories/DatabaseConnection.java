@@ -1,4 +1,4 @@
-package fit.iuh.edu.vn.connection;
+package fit.iuh.edu.vn.repositories;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

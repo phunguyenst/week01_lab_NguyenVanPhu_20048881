@@ -1,6 +1,5 @@
 package fit.iuh.edu.vn.repositories;
 
-import fit.iuh.edu.vn.connection.DatabaseConnection;
 import fit.iuh.edu.vn.entities.Role;
 
 import java.sql.Connection;
