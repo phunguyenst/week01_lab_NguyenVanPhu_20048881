@@ -47,6 +47,15 @@
     <div class="login-container">
         <h1>Đăng nhập</h1>
         <form action="ControllerServlet" method="post">
+            <p>tk của admin <br>
+                email: phuvan@gmail.com
+                password: 123
+                <br>
+                tk của user <br>
+                email:teo@gmail.com
+                password: 123
+
+            </p>
             <label for="txtText" >Email:</label>
             <input type="text" name="txtText" id="txtText" required>
             <label for="txtPass">Mật khẩu:</label>
