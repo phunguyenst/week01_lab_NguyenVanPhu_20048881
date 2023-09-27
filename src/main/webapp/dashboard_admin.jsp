@@ -97,7 +97,13 @@
         <a href="update-account.jsp">Sửa Tài khoản</a>
         <a href="delete-account.jsp">Xóa Tài khoản</a>
     </div>
-
+    <form action="ControllerServlet" method="post">
+        <input type="submit" value="logout" name="logout">
+        <input type="hidden" name="action" value="logout">
+        <div>
+            <%--        <%=log.toString()%>--%>
+        </div>
+    </form>
 
 
 </div>

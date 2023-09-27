@@ -30,8 +30,9 @@
     <label for="status">Status:</label>
     <input type="number" id="status" name="status" required min="0" max="1"><br><br>
 
-    <input type="hidden" name="action" value="addAccount">
     <input type="submit" name="addAccount" value="addAccount">
+
+    <input type="hidden" name="action" value="addAccount">
 
 </form>
 </body>

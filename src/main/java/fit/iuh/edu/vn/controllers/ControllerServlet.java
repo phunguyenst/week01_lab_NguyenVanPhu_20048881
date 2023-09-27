@@ -20,6 +20,7 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/ControllerServlet","/control"})
 public class ControllerServlet extends HttpServlet {
     AccountRepository accountRepository = new AccountRepository();
+    LogRepository logRepository = new LogRepository();
     RoleRepository roleRepository = new RoleRepository();
 
     @Override
@@ -67,7 +68,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        LogRepository logRepository = new LogRepository();
+
         String email = req.getParameter("txtText");
         String password = req.getParameter("txtPass");
 
