@@ -16,15 +16,18 @@
 <head>
     <meta charset="UTF-8">
 
-<%--    <style>--%>
-<%--        body{--%>
-<%--            text-align: center;--%>
-<%--        }--%>
-<%--        .all-button{--%>
-<%--            display: flex;--%>
-<%--            justify-content: center;--%>
-<%--        }--%>
-<%--    </style>--%>
+    <style>
+        body{
+            text-align: center;
+        }
+        input[type="submit"] {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 
 </head>
 <body>

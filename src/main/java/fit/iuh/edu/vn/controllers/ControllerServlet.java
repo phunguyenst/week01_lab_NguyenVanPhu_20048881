@@ -61,6 +61,13 @@ public class ControllerServlet extends HttpServlet {
         if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
             logRepository.addLogoutLog(email);
+            List<String> logList = (List<String>) session.getAttribute("logList");
+            if (logList == null) {
+                logList = new ArrayList<>();
+            }
+            String logEntry = "Đăng xuất thành công vào lúc: " + new Date();
+            logList.add(logEntry);
+            session.setAttribute("logList", logList);
 
             session.invalidate();
             req.getRequestDispatcher("logout.jsp").forward(req, resp);

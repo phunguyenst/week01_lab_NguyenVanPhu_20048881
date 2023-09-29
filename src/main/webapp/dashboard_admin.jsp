@@ -31,6 +31,15 @@
             color: red;
             font-size: 22px;
         }
+
+             /* CSS cho nút logout */
+        input[type="submit"] {
+             background-color: #ff0000;
+             color: #fff;
+             padding: 10px 20px;
+             border: none;
+             cursor: pointer;
+         }
     </style>
 
 </head>
@@ -91,6 +100,22 @@
 <%
     }
 %>
+
+
+    <h3>Log đăng nhập:</h3>
+    <ul>
+        <%
+            List<String> logList = (List<String>) request.getSession().getAttribute("logList");
+            if (logList != null) {
+            for (String log : logList) {
+        %>
+        <li><%= log %></li>
+        <%
+            }
+            }
+        %>
+    </ul>
+
 <div class="all-button">
     <div class="link">
         <a href="add-account.jsp">Thêm Tài khoản</a>
