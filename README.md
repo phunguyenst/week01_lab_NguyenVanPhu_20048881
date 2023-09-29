@@ -4,6 +4,8 @@ thực hành WWW, tuần 01
 Mô tả: Trang html hiển thị cửa sổ đăng nhập với 2 trường email và password,
 đăng nhập thành công là quyền admin sẽ dẫn tới cửa sổ dashboard admin,
 và còn lại dẫn tới cửa sổ dashboard user
+### Admin
+### User
 ![img.png](img.png)
 
 
