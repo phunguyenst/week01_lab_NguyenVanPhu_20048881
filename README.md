@@ -1,9 +1,13 @@
 # week01_lab_NguyenVanPhu_20048881
 thực hành WWW, tuần 01
 
-Mô tả: Trang html hiển thị cửa sổ đăng nhập với 2 trường email và password,
+**Mô tả:** Trang html hiển thị cửa sổ đăng nhập với 2 trường email và password,
 đăng nhập thành công là quyền admin sẽ dẫn tới cửa sổ dashboard admin,
 và còn lại dẫn tới cửa sổ dashboard user
+
+**Diagram:**
+![img_9.png](img_9.png)
+**Demo chương trình :**
 ### Admin
 ### User
 ![img.png](img.png)
